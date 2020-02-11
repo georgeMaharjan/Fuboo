@@ -35,14 +35,16 @@
                                 <th> Contact </th>
                             </tr>
                             </thead>
-                            <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>asdsc</td>
-                                <td>as</td>
-                                <td>sa</td>
-                            </tr>
-                            </tbody>
+                            @foreach($players as $index=>$player)
+                                <tbody>
+                                <tr>
+                                    <td>{{$index+1}}</td>
+                                    <td>{{$player->name}}</td>
+                                    <td>{{$player->email}}</td>
+                                    <td>{{$player->number}}</td>
+                                </tr>
+                                </tbody>
+                            @endforeach
                         </table>
                     </div>
                     <!-- /.card-body -->
@@ -50,7 +52,71 @@
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Owners</h3>
-                        <button type="button" class="btn btn-dark ml-2"> Add </button>
+                        <button class="btn btn-dark ml-2" data-toggle="modal" data-target="#addOwner">Add</button>
+                        {{--add owners--}}
+                        <div class="modal fade" id="addOwner"  tabindex="-1" role="dialog"
+                             aria-labelledby="addOwnerTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="addOwnerTitle">Add new Owner</h5>
+                                    </div>
+
+                                    <form method="POST" action="{{route('addOwner')}}">
+                                        @csrf
+                                        <div class="modal-body">
+                                            <input type="hidden" name="type" value="owner">
+                                            <div class="form-group">
+                                                <label for="name" >{{ __('Name') }}</label>
+                                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+                                                @error('name')
+                                                <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                                @enderror
+                                            </div>
+
+                                            <div class="form-group ">
+                                                <label for="email" >{{ __('E-Mail Address') }}</label>
+                                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
+                                                @error('email')
+                                                <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                                @enderror
+                                            </div>
+
+                                            <div class="form-group ">
+                                                <label for="password">{{ __('Password') }}</label>
+                                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+                                                @error('password')
+                                                <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                                @enderror
+                                            </div>
+
+                                            <div class="form-group ">
+                                                <label for="password-confirm" class=" text-md-right">{{ __('Confirm Password') }}</label>
+
+                                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-dark">
+                                                    {{ __('Register Owner') }}
+                                                </button>
+                                                <button type="button" class=" btn btn-outline-danger" data-dismiss="modal" aria-label="Close">
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        {{--end add owners--}}
+
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body ">
@@ -64,15 +130,17 @@
                                 <th> Futsal </th>
                             </tr>
                             </thead>
-                            <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>asdsc</td>
-                                <td>as</td>
-                                <td>sa</td>
-                                <td>as</td>
-                            </tr>
-                            </tbody>
+                            @foreach($owners as $index => $owner)
+                                <tbody>
+                                <tr>
+                                    <td>{{$index+1}}</td>
+                                    <td>{{$owner->name}}</td>
+                                    <td>{{$owner->email}}</td>
+                                    <td>{{$owner->number}}</td>
+                                    <td></td>
+                                </tr>
+                                </tbody>
+                            @endforeach
                         </table>
                     </div>
                     <!-- /.card-body -->
@@ -81,5 +149,4 @@
         </div><!-- /.container-fluid -->
     </div>
     {{--    end breadcrumbs--}}
-
 @endsection

@@ -26,20 +26,20 @@ class LoginController extends Controller
      *
      * @var string
      */
-//    protected $redirectTo = '/home';
     protected function redirectTo()
     {
         if (Auth::user()->type == 'admin')
         {
+//            dd("js");
             return '/admin';
         }
         elseif (Auth::user()->type == 'owner')
         {
-            return '/owner';
+            return ('owner');
         }
         else
         {
-            return '/';
+            return ('/');
         }
     }
     /**

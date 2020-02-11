@@ -12,25 +12,32 @@
 */
 
 //  welcome page
-Route::view('/','welcome')->middleware('verified');
+Route::view('/','welcome');
 
 
 //Auth routes
-Auth::routes(['verify' => true]);
+Auth::routes();
 
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'HomeController@home')->name('home');
 
 //admin routes
 Route::group(['middleware' =>['auth','admin']],function ()
 {
-    Route::view('/admin','admin.adminpanel')->name('admin');
-    Route::view('/admin/users', 'admin.users')->name('users');
-    Route::view('/admin/futsals','admin.futsals')->name('futsals');
+    Route::get('/admin','AdminController@index')->name('admin');
+
+    //admin user routes
+    Route::get('/admin/users', 'UsersController@index')->name('admin.users');
+    Route::post('/admin/users/addOwner','UsersController@store')->name('addOwner');
+
+    //admin futsal routes
+    Route::view('/admin/futsals','admin.futsals')->name('admin.futsals');
 });
 
 //owner routes
 Route::group(['middleware' => ['auth','owner']], function ()
 {
-    Route::view('/owner','owner.ownerpage');
+    Route::get('/owner','OwnerController@index')->name('owner');
+    Route::get('owner/bookings', 'OwnerController@bookings')->name('bookings');
+    Route::get('owner/stats', 'OwnerController@stats')->name('stats');
 });
