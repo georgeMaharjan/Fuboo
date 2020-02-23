@@ -26,13 +26,13 @@ class HomeController extends Controller
     {
         if (Auth::user()->type == 'admin')
         {
-//            dd("js");
             return redirect()->route('admin');
         }
         elseif (Auth::user()->type == 'owner')
-    {
+        {
             return redirect()->route('owner');
         }
+
         return view('welcome');
     }
 

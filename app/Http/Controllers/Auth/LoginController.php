@@ -30,12 +30,11 @@ class LoginController extends Controller
     {
         if (Auth::user()->type == 'admin')
         {
-//            dd("js");
-            return '/admin';
+                    return '/admin';
         }
         elseif (Auth::user()->type == 'owner')
         {
-            return ('owner');
+            return ('/owner/'.Auth::user()->id);
         }
         else
         {

@@ -12,13 +12,16 @@
 */
 
 //  welcome page
-Route::view('/','welcome');
+Route::view('/','welcome')->name('welcome');
 
+//futsals pages
+Route::get('/futsals','FutsalController@index')->name('futsals');
+Route::get('/futsal/{name}', 'FutsalController@show')->name('futsal.details');
 
 //Auth routes
 Auth::routes();
 
-
+//home pages
 Route::get('/home', 'HomeController@home')->name('home');
 
 //admin routes
@@ -31,13 +34,27 @@ Route::group(['middleware' =>['auth','admin']],function ()
     Route::post('/admin/users/addOwner','UsersController@store')->name('addOwner');
 
     //admin futsal routes
-    Route::view('/admin/futsals','admin.futsals')->name('admin.futsals');
+    Route::get('/admin/futsals','AdminController@futsalindex')->name('admin.futsals');
+    Route::post('/admin/timeslots/store', 'AdminController@storeTimeSlot')->name('timeslots.store');
+
+//    timeslots
+//    Route::get('/admin/timeslots', )->name('admin.timeslots');
+
 });
 
 //owner routes
 Route::group(['middleware' => ['auth','owner']], function ()
 {
-    Route::get('/owner','OwnerController@index')->name('owner');
-    Route::get('owner/bookings', 'OwnerController@bookings')->name('bookings');
-    Route::get('owner/stats', 'OwnerController@stats')->name('stats');
+    Route::get('/owner/{id}','OwnerController@show')->name('owner');
+    Route::get('owner/booking/{id}', 'OwnerController@bookingPage')->name('bookings');
+    Route::get('owner/stats/{id}', 'OwnerController@stats')->name('stats');
+    Route::view('/owner/profile/{id}', 'owner.oprofile')->name('owner.profile');
+    Route::put('/owner/futsal/update/{id}','OwnerController@futsalupdate')->name('futsal.update');
+});
+
+//player middleware
+
+Route::group(['middleware' => ['auth', 'player']],function ()
+{
+   Route::view('/profile','player.profile')->name('player.profile');
 });

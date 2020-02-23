@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\TimeSlots;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 
 class AdminController extends Controller
 {
@@ -16,6 +18,19 @@ class AdminController extends Controller
         return view('admin.adminpanel');
     }
 
+    public function futsalindex()
+    {
+        $time = TimeSlots::get();
+        return view('admin.allfutsals', compact('time'));
+    }
+
+    public function storeTimeSlot(Request $request)
+    {
+        $slot = new TimeSlots();
+        $slot->slots=Input::get('slot');
+        $slot->save();
+        return back();
+    }
     /**
      * Show the form for creating a new resource.
      *

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Futsal;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
@@ -40,12 +41,19 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
+        $futsal = new Futsal();
         $owner = new User();
         $owner->name = Input::get('name');
         $owner->email = Input::get('email');
         $owner->password = bcrypt(Input::get('password'));
         $owner->type = Input::get('type');
         $owner->save();
+
+        $futsal->name = Input::get('futsal' );
+        $futsal->user_id = $owner->id;
+
+        $futsal->save();
+
 
         return back();
 
