@@ -1,9 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.searchnav')
 
 @section('content')
-    <div class="container">
+    <div class="container mt-5">
         @foreach($details as $key)
-            {{$key->name}}
+           <h2> {{$key->name}} </h2>
         @endforeach
     </div>
 @endsection

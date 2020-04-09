@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Futsal;
+use App\Futsal_images;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
@@ -84,14 +85,15 @@ class OwnerController extends Controller
     {
         $user_id = Auth::user()->id;
         $futsal = Futsal::find($id);
+        $futsal_images = Futsal_images::find($id);
         $futsal->name = Input::get('name');
         $futsal->description = Input::get('description');
         $futsal->address = Input::get('address_line_1');
         $futsal->longitude = Input::get('longitude');
         $futsal->latitude = Input::get('latitude');
         $futsal->price = Input::get('price');
-        if ($request->hasFile('image')) {
-            $images = $request->file('image');
+        if ($request->hasFile('images')) {
+            $images = $request->file('images');
             $ext = $images->getClientOriginalExtension();
             $imageName = str_random(5) . '.' . $ext;
             $uploadPath = public_path('images');
@@ -100,7 +102,19 @@ class OwnerController extends Controller
             $futsal->images = $data['photo_path'];
         }
 
+
         $futsal->save();
+//        $futsal_images->save();
+//        if ($request->hasFile('images')) {
+//    foreach ($request->file('images') as $key => $images) {
+//        $ext = $images->getClientOriginalExtension();
+//        $imageName = str_random(5) . '.' . $ext;
+//        $uploadPath = public_path('images');
+//        $images->move($uploadPath, $imageName);
+//        $data['photo_path'] = "images/{$imageName}";
+//        $futsal_images->images = $data['photo_path'];
+//    }
+//}
         return redirect('owner/'.$user_id);
     }
 

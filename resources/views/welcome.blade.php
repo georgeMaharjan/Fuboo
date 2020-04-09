@@ -15,8 +15,6 @@
 
     <!-- Custom fonts for this template -->
     <link href="{{asset('dist1/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="{{asset('dist1/css/grayscale.min.css')}}" rel="stylesheet">
@@ -30,15 +28,51 @@
                 height: 55px;
             }
         }
+
+        .zoom{
+            transition-duration: 0.3s;
+        }
+        .zoom:hover {
+            transition-duration: 0.3s;
+            transform: scale(1.1);
+        }
+        .close{
+            position: absolute;
+            top: 10px;
+            right: -30pc;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            color:#fff;
+            line-height: 0;
+            z-index: 100000;
+        }
     </style >
 
 </head>
+
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered " role="document">
+        <div class="modal-content">
+            <form class="" action="{{route('search.result')}}" method="get">
+                <div class="input-group input-group-lg ">
+                    <input class="form-control border-0" type="search" id="search" name="query" placeholder="Find Futsals" aria-label="Search">
+                    <div class="input-group-append">
+                        <button class="btn btn-navbar" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <body id="page-top" style="font-family: 'Calibri Light',monospace">
 
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg fixed-top" id="mainNav">
-    <div class="container">
+    <div class="container-fluid">
         <a class="navbar-brand js-scroll-trigger" href="{{route('welcome')}}">Fuboo</a>
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             Menu
@@ -47,7 +81,9 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="#browse">Browse</a>
+                    <a class="nav-link" data-toggle="modal" data-target="#exampleModalCenter">
+                        <span> <i class="fa fa-search"></i> </span>
+                    </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link js-scroll-trigger" href="#about">About</a>
@@ -93,30 +129,29 @@
 <section class="masthead" id="browse">
     <div class="container d-flex h-100 align-items-center">
         <div class="mx-auto text-center">
-            <form class="form-inline d-flex">
-                <input type="search " class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="search" placeholder="Find Futsals">
-                <button type="submit" class="btn btn-primary mx-auto">Find</button>
-            </form>
+            <h1>
+                PLAY AWAY!!!
+            </h1>
         </div>
     </div>
 </section>
 
 <!-- About Section -->
-<section id="about" class="about-section text-center bg-light" style="position: relative">
+<section id="about" class="about-section text-center" style="position: relative">
     <div class="container " >
         <div class="row mb-5">
             <div class="col-md">
-                <img src="{{asset('images/web-search.png')}}" class="img-md" alt="" style="height: 100px; width: 100px">
+                <i class="fa fa-search-location text-light fa-8x" style=""></i>
                 <p>Find</p>
             </div>
 
             <div class="col-md">
-                <img src="{{asset('images/ticket.png')}}" class="img-md" alt="" style="height: 100px; width: 100px">
+                <i class="fa fa-ticket-alt text-light fa-8x" style=""></i>
                 <p>Book</p>
             </div>
 
             <div class="col-md">
-                <img src="{{asset('images/croped_image.png')}}" class="img-md" alt="" style="height: 100px; width: 100px">
+                <i class="fa fa-futbol text-light fa-8x" style=""></i>
                 <p>Play</p>
             </div>
         </div>
@@ -126,16 +161,18 @@
                 <p class="text-50">Grayscale is a free Bootstrap theme created by Start Bootstrap. It can be yours right now, simply download the template on
             </div>
         </div>
-        <div class="d-inline-flex mt-3">
-        <div class="col-xl-8 col-lg-7">
-            <img class="img-fluid mb-3 mb-lg-0" src="{{asset('images/balon.jpg')}}" alt="">
-        </div>
-        <div class="col-xl-4 col-lg-5">
-            <div class="featured-text text-center text-lg-left">
-                <h4>Shoreline</h4>
-                <p class="text-black-50 mb-0">Grayscale is open source and MIT licensed. This means you can use it for any project - even commercial projects! Download it, customize it, and publish your website!</p>
+        <div class="row mt-4">
+            <div class="col">
+                <img class=" img-fluid mb-3 mb-lg-0 zoom" src="{{asset('images/volley.jpg')}}" alt="">
             </div>
-        </div>
+            <div class="col">
+                <img class=" img-fluid mb-3 zoom" src="{{asset('images/boot.jpg')}}" alt="">
+
+                <img class=" img-fluid zoom" src="{{asset('images/ball.jpg')}}"  alt="">
+            </div>
+            <div class="col">
+                <img class=" img-fluid mb-3 mb-lg-0 zoom" src="{{asset('images/bootball.jpg')}}" alt="">
+            </div>
         </div>
     </div>
 </section>
@@ -143,21 +180,49 @@
 <!-- Projects Section -->
 <section id="futsals" class="projects-section">
     <div class="container-fluid">
-       <h1 class="mb-2">
-           <a href = "{{route('futsals')}}" class = "btn-link text-dark text-decoration-none" >Find Futsals>></a >
-       </h1>
+        <h1 class="mb-2">
+            <a href = "{{route('futsals')}}" class = "btn-link text-dark text-decoration-none" >Find Futsals>></a >
+        </h1>
         <!-- Project One Row -->
         <div class="row justify-content-center no-gutters mb-5 mb-lg-0">
-            <div class="col-lg-6">
-                <img class="img-fluid" src="{{asset('images/boot.jpg')}}" alt="">
+            <div class="col ">
+                <div class="card no-radius">
+                    <img class="img-fluid card-img-top" src="{{asset('images/boot.jpg')}}" alt="">
+                    <div class="card-body bg-black text-center h-100 project">
+                        <div class="d-flex h-100">
+                            <div class="project-text w-100 my-auto text-center text-lg-left">
+                                <h4 class="text-white">Misty</h4>
+                                <p class="mb-0 text-white-50">An example of where you can put an image of a project, or anything else, along with a description.</p>
+                                <hr class="d-none d-lg-block mb-0 ml-0">
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-lg-6">
-                <div class="bg-black text-center h-100 project">
-                    <div class="d-flex h-100">
-                        <div class="project-text w-100 my-auto text-center text-lg-left">
-                            <h4 class="text-white">Misty</h4>
-                            <p class="mb-0 text-white-50">An example of where you can put an image of a project, or anything else, along with a description.</p>
-                            <hr class="d-none d-lg-block mb-0 ml-0">
+            <div class="col ml-2">
+                <div class="card no-radius">
+                    <img class="img-fluid card-img-top" src="{{asset('images/boot.jpg')}}" alt="">
+                    <div class="card-body bg-black text-center h-100 project">
+                        <div class="d-flex h-100">
+                            <div class="project-text w-100 my-auto text-center text-lg-left">
+                                <h4 class="text-white">Misty</h4>
+                                <p class="mb-0 text-white-50">An example of where you can put an image of a project, or anything else, along with a description.</p>
+                                <hr class="d-none d-lg-block mb-0 ml-0">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col ml-2">
+                <div class="card no-radius">
+                    <img class="img-fluid card-img-top" src="{{asset('images/boot.jpg')}}" alt="">
+                    <div class="card-body bg-black text-center h-100 project">
+                        <div class="d-flex h-100">
+                            <div class="project-text w-100 my-auto text-center text-lg-left">
+                                <h4 class="text-white">Misty</h4>
+                                <p class="mb-0 text-white-50">An example of where you can put an image of a project, or anything else, along with a description.</p>
+                                <hr class="d-none d-lg-block mb-0 ml-0">
+                            </div>
                         </div>
                     </div>
                 </div>

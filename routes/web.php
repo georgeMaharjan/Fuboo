@@ -11,8 +11,14 @@
 |
 */
 
+//try
+Route::view('/try','try');
+
+
 //  welcome page
 Route::view('/','welcome')->name('welcome');
+
+Route::get('/searchresult','FutsalController@search')->name('search.result');
 
 //futsals pages
 Route::get('/futsals','FutsalController@index')->name('futsals');

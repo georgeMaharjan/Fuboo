@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Futsal;
+use App\User;
 use Illuminate\Http\Request;
 
 class FutsalController extends Controller
@@ -23,6 +24,16 @@ class FutsalController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function search(Request $request)
+    {
+        $search=$request->input('query');
+        $results = Futsal::where('address', 'LIKE', "%{$search}%")
+            ->orwhere('name', 'like', "%{$search}%")
+            ->get();
+        return view('results',compact('results'));
+    }
+
     public function create()
     {
         //
@@ -84,4 +95,5 @@ class FutsalController extends Controller
     {
         //
     }
+
 }
