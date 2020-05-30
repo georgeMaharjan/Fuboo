@@ -98,6 +98,16 @@
                                             </div>
 
                                             <div class="form-group ">
+                                                <label for="number" >Contact</label>
+                                                <input id="number" type="tel" class="form-control @error('number') is-invalid @enderror" name="number" required>
+                                                @error('number')
+                                                <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                                @enderror
+                                            </div>
+
+                                            <div class="form-group ">
                                                 <label for="password">{{ __('Password') }}</label>
                                                 <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
                                                 @error('password')
@@ -115,7 +125,7 @@
 
                                             <div class="modal-footer">
                                                 <button type="submit" class="btn btn-dark">
-                                                    {{ __('Register Owner') }}
+                                                    {{ __('Register futsals') }}
                                                 </button>
                                                 <button type="button" class=" btn btn-outline-danger" data-dismiss="modal" aria-label="Close">
                                                     Cancel
@@ -138,7 +148,6 @@
                                 <th> Name </th>
                                 <th> Email</th>
                                 <th> Contact </th>
-                                <th> Futsal </th>
                             </tr>
                             </thead>
                             @foreach($owners as $index => $owner)
@@ -148,7 +157,6 @@
                                     <td>{{$owner->name}}</td>
                                     <td>{{$owner->email}}</td>
                                     <td>{{$owner->number}}</td>
-                                    <td>{{$owner->futsal->name}}</td>
                                 </tr>
                                 </tbody>
                             @endforeach

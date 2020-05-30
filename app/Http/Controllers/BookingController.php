@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\BookingSlots;
+use App\TimeSlots;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 
-class Futsal_ImagesController extends Controller
+class BookingController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,7 +16,7 @@ class Futsal_ImagesController extends Controller
      */
     public function index()
     {
-        //
+
     }
 
     /**
@@ -34,7 +37,10 @@ class Futsal_ImagesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $booking = new BookingSlots();
+        $booking->time_slot_id = Input::get('time_slot_id');
+        $booking->customer_id = Input::get('customer_id');
+        return $request;
     }
 
     /**

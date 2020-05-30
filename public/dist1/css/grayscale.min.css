@@ -38,7 +38,7 @@
 
 #mainNav .navbar-nav .nav-item:active, #mainNav .navbar-nav .nav-item:focus {
     outline: 0;
-    background-color: transparent;
+    background-color: transparerent;
     color: #66FCF1;
 }
 
@@ -103,6 +103,7 @@
 }
 
 .masthead {
+
     position: relative;
     width: 100%;
     padding: 15rem 0;

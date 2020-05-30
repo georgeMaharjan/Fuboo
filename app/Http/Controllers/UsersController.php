@@ -45,6 +45,7 @@ class UsersController extends Controller
         $owner = new User();
         $owner->name = Input::get('name');
         $owner->email = Input::get('email');
+        $owner->number = Input::get('number');
         $owner->password = bcrypt(Input::get('password'));
         $owner->type = Input::get('type');
         $owner->save();
@@ -53,10 +54,7 @@ class UsersController extends Controller
         $futsal->user_id = $owner->id;
 
         $futsal->save();
-
-
         return back();
-
     }
 
     /**
@@ -67,7 +65,9 @@ class UsersController extends Controller
      */
     public function show($id)
     {
-        //
+        $user=User::where('id',$id)
+            ->get();
+        return view('player.profile',compact('user'));
     }
 
     /**
@@ -90,7 +90,21 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $player=User::find($id);
+        $player->name=Input::get('name');
+        $player->number=Input::get('number');
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $ext = $image->getClientOriginalExtension();
+            $imageName = str_random(5) . '.' . $ext;
+            $uploadPath = public_path('images/users');
+            $image->move($uploadPath, $imageName);
+            $data['photo_path'] = "images/users/{$imageName}";
+            $player->image = $data['photo_path'];
+        }
+        $player->save();
+        return back();
+
     }
 
     /**

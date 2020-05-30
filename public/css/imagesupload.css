@@ -282,9 +282,9 @@ textarea {
 .uploader__submit-button {
     background-color: white;
     background-color: transparent;
-    border: 2px solid #cc3333;
+    border: 2px solid #343a40;
     border-radius: 0px;
-    color: #cc3333;
+    color: #343a40;
     display: block;
     font-size: 16px;
     padding: 8px 20px;
@@ -292,7 +292,6 @@ textarea {
     text-transform: uppercase;
     transition: background-color 0.2s;
     text-transform: capitalize;
-    border-radius: 50px;
 }
 
 .button:hover,
@@ -305,13 +304,13 @@ textarea {
 .uploader__file-label:focus,
 .uploader__file-input:focus+.uploader__file-label,
 .uploader__submit-button:focus {
-    background-color: #cc3333;
+    background-color: #343a40;
     color: white;
 }
 
 .button--secondary {
-    color: #cc3333;
-    border-color: #cc3333;
+    color: #343a40;
+    border-color: #343a40;
     padding: 0.5em 1em;
     max-width: 15em;
 }
@@ -320,7 +319,7 @@ textarea {
 .button--secondary:active,
 .button--secondary:focus,
 .uploader__file-input:focus+.uploader__file-label {
-    background-color: #cc3333;
+    background-color: #343a40;
     color: white;
 }
 
@@ -335,7 +334,7 @@ textarea {
     font-size: 14px;
     text-align: center;
     border-radius: 0;
-    background-color: #cc3333;
+    background-color: #343a40;
     color: white;
     text-align: center;
     padding: 8px 20px;
@@ -350,7 +349,7 @@ textarea {
 .button--big-bottom:focus,
 .uploader__submit-button:focus {
     background-color: transparent;
-    border: 2px solid #cc3333;
+    border: 2px solid #343a40;
     color: #888;
 }
 
@@ -513,7 +512,7 @@ textarea {
 }
 
 .site-title {
-    color: #cc3333;
+    color: #343a40;
     font-size: 0.8em;
     padding: 1.5em 0;
     text-transform: uppercase;

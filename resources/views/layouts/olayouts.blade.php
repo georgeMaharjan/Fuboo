@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="{{asset('plugins/summernote/summernote-bs4.css')}}">
 
 </head>
-<body class="hold-transition sidebar-mini layout-fixed">
+<body class="hold-transition sidebar-mini layout-fixed" style="font-family: 'Calibri Light',monospace; font-size: 150%">
 <div class="wrapper">
 
     <!-- Navbar -->
@@ -40,15 +40,15 @@
         </ul>
         <!-- Right navbar links -->
     </nav>
-    <!-- /.navbar -->
+    <!-- /.navbar -->                               
 
     <!-- Main Sidebar Container -->
-    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <aside class="main-sidebar sidebar-dark-primary elevation-4" style="font-size: 20px; color: #66FCF1">
         <!-- Brand Logo -->
         <a href="{{ route('owner',Auth::user()->id)  }}" class="brand-link">
             <img src="{{asset('dist/img/AdminLTELogo.png')}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
                  style="opacity: .8">
-            <span class="brand-text font-weight-light">{{ Auth::user()->name }}</span>
+            <span class="brand-text font-weight-light">Futsal</span>
         </a>
 
         <!-- Sidebar -->
@@ -84,21 +84,23 @@
                             </p>
                         </a>
                     </li>
+
                     <li class="nav-item">
-                        <a href="{{ route('stats',Auth::user()->id)}}" class="nav-link">
-                            <i class="nav-icon fas fa-chart-bar"></i>
+                        <a href = "{{route('welcome')}}" class="nav-link">
+                            <i class="nav-icon fas fa-globe"></i>
                             <p>
-                                Statistics
+                                Browse
                             </p>
-                        </a>
+                        </a >
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('logout') }}"
                            onclick="event.preventDefault();
                             document.getElementById('logout-form').submit();">
                             <i class="fas fa-sign-out-alt mr-2"></i>
                             <p>
-                                Logout
+                                Logout                     
                             </p>
                         </a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Futsal;
 use App\Futsal_images;
+use App\TimeSlots;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
@@ -17,6 +18,7 @@ class OwnerController extends Controller
      */
     public function index()
     {
+        //
     }
 
     public function bookingPage($id)
@@ -24,10 +26,6 @@ class OwnerController extends Controller
         return view('owner.bookings');
     }
 
-    public function stats()
-    {
-        return view('owner.stats');
-    }
 
     /**
      * Show the form for creating a new resource.
@@ -59,7 +57,11 @@ class OwnerController extends Controller
     public function show($id)
     {
         $futsal = Futsal::where('user_id',$id)->get();
-        return view('owner.ownerpage', compact('futsal'));
+        foreach ($futsal as $detail)
+        {
+            $timeSlots = TimeSlots::where('futsal_id',$detail->id)->get();
+        }
+        return view('owner.ownerpage',compact('futsal','timeSlots'));
 
     }
 
@@ -84,26 +86,33 @@ class OwnerController extends Controller
     public function futsalupdate(Request $request, $id)
     {
         $user_id = Auth::user()->id;
+
         $futsal = Futsal::find($id);
-        $futsal_images = Futsal_images::find($id);
         $futsal->name = Input::get('name');
         $futsal->description = Input::get('description');
         $futsal->address = Input::get('address_line_1');
         $futsal->longitude = Input::get('longitude');
         $futsal->latitude = Input::get('latitude');
         $futsal->price = Input::get('price');
+        $futsal->save();
+
         if ($request->hasFile('images')) {
-            $images = $request->file('images');
-            $ext = $images->getClientOriginalExtension();
-            $imageName = str_random(5) . '.' . $ext;
-            $uploadPath = public_path('images');
-            $images->move($uploadPath, $imageName);
-            $data['photo_path'] = "images/{$imageName}";
-            $futsal->images = $data['photo_path'];
+            $images_array = $request->file('images');
+            foreach ($images_array as $image)
+            {
+                $ext = $image->getClientOriginalExtension();
+                $imageName = str_random(5) . '.' . $ext;
+                $uploadPath = public_path('images/futsals');
+                $image->move($uploadPath, $imageName);
+                $data['photo_path'] = "images/futsals/{$imageName}";
+
+                $futsal_images = new Futsal_images;
+                $futsal_images->image = $imageName;
+                $futsal_images->futsal_id = Input::get('futsal_id');
+                $futsal_images->save();
+            }
         }
 
-
-        $futsal->save();
 //        $futsal_images->save();
 //        if ($request->hasFile('images')) {
 //    foreach ($request->file('images') as $key => $images) {
@@ -127,5 +136,19 @@ class OwnerController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function addTimeSlot(Request $request)
+    {
+        $timeSlot = new TimeSlots();
+        $from = Input::get('from');
+        $to = Input::get('to');
+        $slot = $from.'-'.$to;
+        $timeSlot->futsal_id = Input::get('futsal_id');
+        $timeSlot->date = Input::get('date');
+        $timeSlot->slots = $slot;
+        $timeSlot->price = Input::get('price');
+        $timeSlot->save();
+        return back();
     }
 }

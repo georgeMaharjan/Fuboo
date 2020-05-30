@@ -11,8 +11,8 @@ class BookingSlots extends Model
         return $this->belongsTo(TimeSlots::class);
     }
 
-    public function futsal()
+    public function user()
     {
-        return $this->belongsTo(Futsal::class);
+        return $this->belongsTo(User::class);
     }
 }

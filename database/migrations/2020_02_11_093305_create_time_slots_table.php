@@ -16,20 +16,29 @@ class CreateTimeSlotsTable extends Migration
     {
         Schema::create('time_slots', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('slots')->nullable();
+            $table->unsignedBigInteger('futsal_id');
+            $table->date('date');
+            $table->string('slots');
+            $table->string('status')->nullable();
+            $table->integer('price');
+            $table->foreign('futsal_id')
+                ->references('id')
+                ->on('futsals')
+                ->onDelete('cascade');
             $table->timestamps();
         });
-        $data = [
-            [
-                'id'                    => 1,
-                'slots'                  => '6:00-7:00',
-            ],
-            [
-                'id'                    => 2,
-                'slots'                  => '7:00-8:00',
-            ]
-        ];
-        DB::table('time_slots')->insert($data);
+//        inserting into table when creating
+//        $data = [
+//            [
+//                'id'                    => 1,
+//                'slots'                  => '6:00-7:00',
+//            ],
+//            [
+//                'id'                    => 2,
+//                'slots'                  => '7:00-8:00',
+//            ]
+//        ];
+//        DB::table('time_slots')->insert($data);
     }
 
     /**

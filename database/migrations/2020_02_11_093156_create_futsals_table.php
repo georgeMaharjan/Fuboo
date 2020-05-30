@@ -26,7 +26,6 @@ class CreateFutsalsTable extends Migration
             $table->string('longitude')->nullable() ;
             $table->string('latitude')->nullable() ;
             $table->string('price')->nullable();
-            $table->string('images')->nullable();
             $table->timestamps();
         });
     }

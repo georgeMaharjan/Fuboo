@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="{{asset('plugins/jqvmap/jqvmap.min.css')}}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{asset('dist/css/adminlte.min.css')}}">
+
     <!-- overlayScrollbars -->
     <link rel="stylesheet" href="{{asset('plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}">
     <!-- Daterange picker -->
@@ -28,7 +29,7 @@
     <link rel="stylesheet" href="{{asset('plugins/summernote/summernote-bs4.css')}}">
 
 </head>
-<body class="hold-transition sidebar-mini layout-fixed">
+<body class="hold-transition sidebar-mini layout-fixed" >
 <div class="wrapper">
 
     <!-- Navbar -->
@@ -128,7 +129,7 @@
                         <img src="{{asset('images/default.png')}}" class="img-circle elevation-2" alt="">
                     </div>
                     <div class="info">
-                    <a href="{{ url('/admin')  }}" class="d-block">Alexander Pierce</a>
+                    <a href="{{route('admin',Auth::user()->id)}}" class="d-block">Admin</a>
                 </div>
             </div>
             <!-- Sidebar Menu -->
@@ -138,7 +139,7 @@
                          with font-awesome or any other icon font library -->
 
                     <li class="nav-item">
-                        <a href="{{ url('/admin')  }}" class="nav-link">
+                        <a href="{{ route('admin',Auth::user()->id)  }}" class="nav-link">
                             <i class="nav-icon fas fa-user-cog"></i>
                             <p>
                                 Dashboard

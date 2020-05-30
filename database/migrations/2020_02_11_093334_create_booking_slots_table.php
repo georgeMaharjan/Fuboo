@@ -14,18 +14,18 @@ class CreateBookingSlotsTable extends Migration
     public function up()
     {
         Schema::create('booking_slots', function (Blueprint $table) {
-            $table->unsignedBigInteger('futsals_id');
+            $table->bigInteger('id');
             $table->unsignedBigInteger('time_slots_id');
-            $table->foreign('futsals_id')
+            $table->unsignedBigInteger('customer_id');
+            $table->foreign('customer_id')
                 ->references('id')
-                ->on('futsals')
+                ->on('users')
                 ->onDelete('cascade');
             $table->foreign('time_slots_id')
                 ->references('id')
                 ->on('time_slots')
                 ->onDelete('cascade');
-            $table->primary(['futsals_id', 'time_slots_id']);
-            $table->boolean('availability');
+            $table->string('payment')->default('remaining');
             $table->timestamps();
         });
     }

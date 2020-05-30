@@ -15,4 +15,8 @@ class Futsal extends Model
     {
         return $this->hasMany(Futsal_images::class);
     }
+    public function timeSlots()
+    {
+        return $this->hasMany(TimeSlots::class);
+    }
 }

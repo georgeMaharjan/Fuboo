@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Futsal;
+use App\TimeSlots;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -16,7 +17,8 @@ class FutsalController extends Controller
     public function index()
     {
         $futsals = Futsal::get();
-        return view('futsals.futsals',compact('futsals'));
+        $timeslots=TimeSlots::get();
+        return view('futsals.futsals',compact('futsals','timeslots'));
     }
 
     /**
@@ -59,7 +61,12 @@ class FutsalController extends Controller
     public function show($name)
     {
         $details = Futsal::where('name',$name)->get();
-        return view('futsals.futsaldetails',compact('details'));
+        foreach ($details as $detail)
+        {
+            $timeslots = TimeSlots::where('futsal_id',$detail->id)
+                ->get();
+        }
+        return view('futsals.futsaldetails',compact('details', 'timeslots'));
     }
 
     /**

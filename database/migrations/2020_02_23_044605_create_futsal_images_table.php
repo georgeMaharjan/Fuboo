@@ -16,7 +16,7 @@ class CreateFutsalImagesTable extends Migration
         Schema::create('futsal_images', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('futsal_id');
-            $table->string('images');
+            $table->string('image');
             $table->timestamps();
             $table->foreign('futsal_id')
                 ->references('id')

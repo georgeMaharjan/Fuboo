@@ -30,7 +30,7 @@ class LoginController extends Controller
     {
         if (Auth::user()->type == 'admin')
         {
-                    return '/admin';
+            return '/admin';
         }
         elseif (Auth::user()->type == 'owner')
         {

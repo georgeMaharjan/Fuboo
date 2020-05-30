@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Futsal;
 use App\TimeSlots;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 
@@ -15,13 +17,16 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return view('admin.adminpanel');
+        $type='admin';
+        $admin=User::where('type', $type)
+            ->get();
+        return view('admin.adminpanel',compact('admin'));
     }
 
     public function futsalindex()
     {
-        $time = TimeSlots::get();
-        return view('admin.allfutsals', compact('time'));
+        $futsals = Futsal::get();
+        return view('admin.allfutsals', compact('futsals'));
     }
 
     public function storeTimeSlot(Request $request)
@@ -60,7 +65,10 @@ class AdminController extends Controller
      */
     public function show($id)
     {
-        //
+        $admin=User::where('id',$id)
+            ->get();
+//        return $admin;
+        return view('admin.adminpanel', compact('admin'));
     }
 
     /**

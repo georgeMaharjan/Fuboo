@@ -25,7 +25,7 @@
         @media(min-width:1100px) and (max-width:1950px){
             .masthead #search{
                 width:700px !important;
-                height: 55px;
+                height: 75px;
             }
         }
 
@@ -52,14 +52,14 @@
 </head>
 
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered " role="document">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content">
-            <form class="" action="{{route('search.result')}}" method="get">
-                <div class="input-group input-group-lg ">
-                    <input class="form-control border-0" type="search" id="search" name="query" placeholder="Find Futsals" aria-label="Search">
+            <form action="{{route('search.result')}}" method="get">
+                <div class="input-group input-group-lg" style="height: 70px">
+                    <input class="form-control border-0" type="search" id="search" name="query" placeholder="Find Futsals" aria-label="Search" style="height: 70px; font-size: 30px">
                     <div class="input-group-append">
                         <button class="btn btn-navbar" type="submit">
-                            <i class="fas fa-search"></i>
+                            <i class="fas fa-search" style="font-size: 30px"></i>
                         </button>
                     </div>
                 </div>
@@ -91,6 +91,13 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{route('futsals')}}">Futsals</a>
                 </li>
+                @auth()
+                    @if(Auth::user()->type == 'owner')
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('owner',Auth::user()->id)}}">My Futsal</a>
+                        </li>
+                    @endif
+                @endauth
                 @guest
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
@@ -106,7 +113,14 @@
                             {{ Auth::user()->name }} <span class="caret"></span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a href = "{{route('home')}}" class = "dropdown-item" >profile</a >
+                            @if(Auth::user()->type == 'owner')
+                                <a href = "{{route('owner.profile',Auth::user()->id)}}" class = "dropdown-item" >profile</a >
+                                
+                            @elseif(Auth::user()->type == 'admin')
+                                <a href = "{{route('admin',Auth::user()->id)}}" class = "dropdown-item" >profile</a >
+                            @else
+                                <a href = "{{route('player.profile',Auth::user()->id)}}" class = "dropdown-item" >profile</a >
+                            @endif
                             <a class="dropdown-item" href="{{ route('logout') }}"
                                onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -119,7 +133,6 @@
                         </div>
                     </li>
                 @endguest
-
             </ul>
         </div>
 
@@ -128,7 +141,7 @@
 
 <section class="masthead" id="browse">
     <div class="container d-flex h-100 align-items-center">
-        <div class="mx-auto text-center">
+        <div class="mx-auto">
             <h1>
                 PLAY AWAY!!!
             </h1>
@@ -141,17 +154,17 @@
     <div class="container " >
         <div class="row mb-5">
             <div class="col-md">
-                <i class="fa fa-search-location text-light fa-8x" style=""></i>
+                <i class="fa fa-search-location text-light fa-6x" style=""></i>
                 <p>Find</p>
             </div>
 
             <div class="col-md">
-                <i class="fa fa-ticket-alt text-light fa-8x" style=""></i>
+                <i class="fa fa-ticket-alt text-light fa-6x" style=""></i>
                 <p>Book</p>
             </div>
 
             <div class="col-md">
-                <i class="fa fa-futbol text-light fa-8x" style=""></i>
+                <i class="fa fa-futbol text-light fa-6x" style=""></i>
                 <p>Play</p>
             </div>
         </div>
@@ -181,53 +194,51 @@
 <section id="futsals" class="projects-section">
     <div class="container-fluid">
         <h1 class="mb-2">
-            <a href = "{{route('futsals')}}" class = "btn-link text-dark text-decoration-none" >Find Futsals>></a >
+            <a href = "{{route('futsals')}}" class = "btn-link text-dark text-decoration-none" >Find Futsals</a >
         </h1>
         <!-- Project One Row -->
-        <div class="row justify-content-center no-gutters mb-5 mb-lg-0">
-            <div class="col ">
-                <div class="card no-radius">
-                    <img class="img-fluid card-img-top" src="{{asset('images/boot.jpg')}}" alt="">
-                    <div class="card-body bg-black text-center h-100 project">
-                        <div class="d-flex h-100">
-                            <div class="project-text w-100 my-auto text-center text-lg-left">
-                                <h4 class="text-white">Misty</h4>
-                                <p class="mb-0 text-white-50">An example of where you can put an image of a project, or anything else, along with a description.</p>
-                                <hr class="d-none d-lg-block mb-0 ml-0">
-                            </div>
+        <div class="card-deck">
+            <div class="card no-radius">
+                <img class="img-fluid card-img-top" src="{{asset('images/boot.jpg')}}" alt="">
+                <div class="card-body bg-black text-center h-100 project">
+                    <div class="d-flex h-100">
+                        <div class="project-text w-100 my-auto text-center text-lg-left">
+                            <h4 class="text-white">Misty</h4>
+                            <p class="mb-0 text-white-50">An example of where you can put an image of a project, or anything else, along with a description.</p>
+                            <hr class="d-none d-lg-block mb-0 ml-0">
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col ml-2">
-                <div class="card no-radius">
-                    <img class="img-fluid card-img-top" src="{{asset('images/boot.jpg')}}" alt="">
-                    <div class="card-body bg-black text-center h-100 project">
-                        <div class="d-flex h-100">
-                            <div class="project-text w-100 my-auto text-center text-lg-left">
-                                <h4 class="text-white">Misty</h4>
-                                <p class="mb-0 text-white-50">An example of where you can put an image of a project, or anything else, along with a description.</p>
-                                <hr class="d-none d-lg-block mb-0 ml-0">
-                            </div>
+
+            <div class="card no-radius">
+                <img class="img-fluid card-img-top" src="{{asset('images/boot.jpg')}}" alt="">
+                <div class="card-body bg-black text-center h-100 project">
+                    <div class="d-flex h-100">
+                        <div class="project-text w-100 my-auto text-center text-lg-left">
+                            <h4 class="text-white">Misty</h4>
+                            <p class="mb-0 text-white-50">An example of where you can put an image of a project, or anything else, along with a description.</p>
+                            <hr class="d-none d-lg-block mb-0 ml-0">
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col ml-2">
-                <div class="card no-radius">
-                    <img class="img-fluid card-img-top" src="{{asset('images/boot.jpg')}}" alt="">
-                    <div class="card-body bg-black text-center h-100 project">
-                        <div class="d-flex h-100">
-                            <div class="project-text w-100 my-auto text-center text-lg-left">
-                                <h4 class="text-white">Misty</h4>
-                                <p class="mb-0 text-white-50">An example of where you can put an image of a project, or anything else, along with a description.</p>
-                                <hr class="d-none d-lg-block mb-0 ml-0">
-                            </div>
+
+
+            <div class="card no-radius">
+                <img class="img-fluid card-img-top" src="{{asset('images/boot.jpg')}}" alt="">
+                <div class="card-body bg-black text-center h-100 project">
+                    <div class="d-flex h-100">
+                        <div class="project-text w-100 my-auto text-center text-lg-left">
+                            <h4 class="text-white">Misty</h4>
+                            <p class="mb-0 text-white-50">An example of where you can put an image of a project, or anything else, along with a description.</p>
+                            <hr class="d-none d-lg-block mb-0 ml-0">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </section>
 

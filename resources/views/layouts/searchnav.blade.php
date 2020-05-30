@@ -17,9 +17,36 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{asset('css/app.css')}}">
+    <link href="{{asset('dist1/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet">
     <link href="{{ asset('css/navbar.css') }}" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+
+    <style >
+        .form-control:focus {
+            box-shadow: none;
+        }
+    </style >
 </head>
+<!--searchbar-->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document"  style="max-width: 700px !important;">
+        <div class="modal-content">
+            <form action="{{route('search.result')}}" method="get" >
+                <div class="input-group input-group-lg" style="height: 60px; width:700px !important">
+                    <input class="form-control border-0" type="search" id="search" name="query" placeholder="Find Futsals" aria-label="Search" style="height: 70px;width:600px !important; font-size: 30px">
+                    <div class="input-group-append" >
+                        <button class="btn-xl btn-black btn " style="height: 70px" type="submit">
+                            <i class="fas fa-search" style="font-size: 30px"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--        searchbar-->
 <body style="font-family: 'Calibri Light',monospace">
 
 <nav class="navbar navbar-expand-lg fixed-top" id="mainNav">
@@ -36,6 +63,9 @@
                         <span> <i class="fa fa-search"></i> </span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{route('futsals')}}">Futsals</a>
+                </li>
                 @guest
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
@@ -51,9 +81,15 @@
                             {{ Auth::user()->name }} <span class="caret"></span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a href = "{{route('home')}}" class = "dropdown-item" >profile</a >
-                            <a class="dropdown-item" href="{{ route('logout') }}"
-                               onclick="event.preventDefault();
+                            @if(Auth::user()->type == 'owner')
+                                <a href = "{{route('owner.profile',Auth::user()->id)}}" class = "dropdown-item" >profile</a >
+
+                            @elseif(Auth::user()->type == 'admin')
+                                <a href = "{{route('admin',Auth::user()->id)}}" class = "dropdown-item" >profile</a >
+                            @else
+                                <a href = "{{route('player.profile',Auth::user()->id)}}" class = "dropdown-item" >profile</a >
+                            @endif                            <a class="dropdown-item" href="{{ route('logout') }}"
+                                                                 onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                 {{ __('Logout') }}
                             </a>

@@ -24,6 +24,11 @@ Route::get('/searchresult','FutsalController@search')->name('search.result');
 Route::get('/futsals','FutsalController@index')->name('futsals');
 Route::get('/futsal/{name}', 'FutsalController@show')->name('futsal.details');
 
+//Booking Routes
+
+Route::post('/futsal/booking', 'BookingController@store')->name('futsal.booking')->middleware('auth');
+
+
 //Auth routes
 Auth::routes();
 
@@ -33,7 +38,7 @@ Route::get('/home', 'HomeController@home')->name('home');
 //admin routes
 Route::group(['middleware' =>['auth','admin']],function ()
 {
-    Route::get('/admin','AdminController@index')->name('admin');
+    Route::get('/admin/','AdminController@index')->name('admin');
 
     //admin user routes
     Route::get('/admin/users', 'UsersController@index')->name('admin.users');
@@ -41,8 +46,6 @@ Route::group(['middleware' =>['auth','admin']],function ()
 
     //admin futsal routes
     Route::get('/admin/futsals','AdminController@futsalindex')->name('admin.futsals');
-    Route::post('/admin/timeslots/store', 'AdminController@storeTimeSlot')->name('timeslots.store');
-
 //    timeslots
 //    Route::get('/admin/timeslots', )->name('admin.timeslots');
 
@@ -56,11 +59,12 @@ Route::group(['middleware' => ['auth','owner']], function ()
     Route::get('owner/stats/{id}', 'OwnerController@stats')->name('stats');
     Route::view('/owner/profile/{id}', 'owner.oprofile')->name('owner.profile');
     Route::put('/owner/futsal/update/{id}','OwnerController@futsalupdate')->name('futsal.update');
+    Route::post('/owner/addTimeSlot', 'OwnerController@addTimeSlot')->name('addTimeSlot');
 });
 
 //player middleware
-
 Route::group(['middleware' => ['auth', 'player']],function ()
 {
-   Route::view('/profile','player.profile')->name('player.profile');
+   Route::get('/profile/{id}','UsersController@show')->name('player.profile');
+   Route::put('/profile/update/{id}','UsersController@update')->name('player.update');
 });
