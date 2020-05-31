@@ -24,12 +24,14 @@
                     @endforeach
                 </ol>
                 <div class="carousel-inner">
-                    @foreach( $images as $image )
+                    @forelse( $images as $image )
                         <div class="carousel-item {{ $loop->first ? 'active' : '' }} crop">
                             <img src="{{ is_null($image->image) ? asset('images/ground.jpg') : asset($image->image) }}" class="d-block w-100" alt="..." height="auto" width="100%">
 
                         </div>
-                    @endforeach
+                    @empty
+                        <img src="{{asset('images/ground.jpg')}}" class="d-block w-100" alt="..." height="auto" width="100%">
+                    @endforelse
                 </div>
                 <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -50,6 +52,9 @@
                 <h3>{{$detail->description}}</h3>
                 <h3>{{$detail->address}}</h3>
                 <h3>{{$detail->price}}</h3>
+            </div>
+            <div>
+                <iframe src="https://maps.google.com/maps?q={{$detail->latitude}}, {{$detail->longitude}}&z=17&output=embed" width="360" height="270" frameborder="0" style="border:0"></iframe>
             </div>
             <hr>
 

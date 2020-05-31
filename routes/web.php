@@ -22,6 +22,10 @@ Route::get('/searchresult','FutsalController@search')->name('search.result');
 
 //futsals pages
 Route::get('/futsals','FutsalController@index')->name('futsals');
+Route::get('/futsals/get-lists', [
+    'as' => 'futsals.getLists',
+    'uses' => 'FutsalController@getLists'
+]);
 Route::get('/futsal/{name}', 'FutsalController@show')->name('futsal.details');
 
 //Booking Routes
