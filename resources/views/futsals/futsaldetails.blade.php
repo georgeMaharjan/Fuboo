@@ -1,39 +1,48 @@
 @extends('layouts.searchnav')
+<style >
+    .crop {
+        width: 100%;
+        height: 75%;
+        overflow: hidden;
+    }
 
+    .crop img {
+        width: 100%;
+        height: auto;
+        margin: -150px 0 0 -10px;
+
+</style >
 @section('content')
     <div>
-        @foreach( $details as $detail )
-            <body>
-            <div id="carouselExampleIndicators" class="carousel slide mt-2" data-ride="carousel">
+        <body>
+        <div class="bd-example">
+            <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
+
                 <ol class="carousel-indicators">
-                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                    @foreach($images as $image)
+                        <li data-target=".carouselExampleCaptions" data-slide-to="{{ $loop->index }}" class="{{ $loop->first ? 'active' : '' }}"></li>
+                    @endforeach
                 </ol>
                 <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        @if($detail->images)
-                            <img src="{{asset($detail->images)}}" style="width: 100%; height: 50%" alt="...">
-                        @else
-                            <img src = "{{asset('images/ground.jpg')}}" style="width: 100%; height: 50%" alt = "">
-                        @endif
-                    </div>
-                    {{--                <div class="carousel-item">--}}
-                    {{--                    <img src="..." class="d-block w-100" alt="...">--}}
-                    {{--                </div>--}}
-                    {{--                <div class="carousel-item">--}}
-                    {{--                    <img src="..." class="d-block w-100" alt="...">--}}
-                    {{--                </div>--}}
+                    @foreach( $images as $image )
+                        <div class="carousel-item {{ $loop->first ? 'active' : '' }} crop">
+                            <img src="{{ is_null($image->image) ? asset('images/ground.jpg') : asset($image->image) }}" class="d-block w-100" alt="..." height="auto" width="100%">
+
+                        </div>
+                    @endforeach
                 </div>
-                <a class="carousel-control-prev " href="#carouselExampleIndicators" role="button" data-slide="prev">
+                <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="sr-only">Previous</span>
                 </a>
-                <a class="carousel-control-next " href="#carouselExampleIndicators" role="button" data-slide="next">
+                <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                     <span class="sr-only">Next</span>
                 </a>
             </div>
+        </div>
+
+        @foreach( $futsal as $detail )
             <div>
                 <h1>
                     {{$detail->name}}
@@ -75,7 +84,7 @@
                     </thead>
                 </table>
             </div>
-            </body>
+        </body>
         @endforeach
     </div>
 @endsection

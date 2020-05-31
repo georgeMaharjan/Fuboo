@@ -61,7 +61,12 @@ class OwnerController extends Controller
         {
             $timeSlots = TimeSlots::where('futsal_id',$detail->id)->get();
         }
-        return view('owner.ownerpage',compact('futsal','timeSlots'));
+        foreach ($futsal as $detail)
+        {
+            $images = Futsal_images::where('futsal_id',$detail->id)->get();
+        }
+//        return $images;
+        return view('owner.ownerpage',compact('futsal','timeSlots','images'));
 
     }
 
@@ -102,12 +107,13 @@ class OwnerController extends Controller
             {
                 $ext = $image->getClientOriginalExtension();
                 $imageName = str_random(5) . '.' . $ext;
-                $uploadPath = public_path('images/futsals');
+                $uploadPath = public_path('images/futsals/');
                 $image->move($uploadPath, $imageName);
                 $data['photo_path'] = "images/futsals/{$imageName}";
 
+
                 $futsal_images = new Futsal_images;
-                $futsal_images->image = $imageName;
+                $futsal_images->image = $data['photo_path'];
                 $futsal_images->futsal_id = Input::get('futsal_id');
                 $futsal_images->save();
             }
