@@ -90,6 +90,7 @@ class OwnerController extends Controller
      */
     public function futsalupdate(Request $request, $id)
     {
+
         $user_id = Auth::user()->id;
 
         $futsal = Futsal::find($id);

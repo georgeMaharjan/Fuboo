@@ -19,7 +19,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="card-body ">
+                    <div class="card-body">
                         <table class="table table-hover table-bordered table-responsive-lg">
                             <thead>
                             <tr>
@@ -42,7 +42,6 @@
                             @endforeach
                             </thead>
                         </table>
-
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -54,21 +53,21 @@
     <div class="container-fluid mt-5 ">
         <div class="row">
             @foreach($futsals as $futsal)
-                <div class="col-md-4 mb-4">
-                    <div class="card no-radius">
+                <div class="col-4 mb-4">
+                    <div class="card no-radius" style="height:540px;">
                         <a href = "{{route('futsal.details',$futsal->name)}}" class="text-dark " >
                             @if($futsal->images)
                                 <img src="{{asset($futsal->images)}}" class="card-img-top">
                             @else
                                 <img src = "{{asset('images/ground.jpg')}}" class="card-img-top">
                             @endif
-                            <div class="card-body">
+                            <div class="card-body" style="height:220px; ">
                                 <h1>{{$futsal -> name}}</h1>
                                 <h2>{{$futsal -> address}}</h2>
                                 <h2>{{$futsal -> price}}</h2>
                             </div>
                         </a >
-                        <div class="btn btn-black" data-backdrop="static" data-toggle="modal" data-target="#BookModal{{$futsal -> id}}">
+                        <div class="btn btn-black card-footer" data-backdrop="static" data-toggle="modal" data-target="#BookModal{{$futsal -> id}}">
                             Book
                         </div>
                     </div>
