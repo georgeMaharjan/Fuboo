@@ -107,5 +107,25 @@ class FutsalController extends Controller
     {
         //
     }
+    public function getLists(Request $request)
+    {
+        return getListsTimeSlot($request);
+    }
 
+    public function getListsTimeSlot($request)
+	{
+	    $timeslots = \App\TimeSlots::
+	        when($request->q, function($q) use($request){
+	            return $q->where('name', 'like', "%{$request->q}%");
+	        })->paginate(20);
+
+	    $items['items'] = $timeslots->transform(function($item){
+	        return [
+	            'id' => $item->id,
+	            'text' => $item->slots
+	        ];
+	    });
+
+	    return $items;
+	}
 }
