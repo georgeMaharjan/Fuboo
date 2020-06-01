@@ -91,5 +91,14 @@
             </div>
         </body>
         @endforeach
+        <form action="{{route('futsal.booking')}}" method="POST">
+            @csrf
+            @foreach($timeslots as $timeslot)
+                <label for="timeslots[]"> {{$timeslot -> slots}}</label>
+                <input type="checkbox" name="timeslots[]" value="{{$timeslot->id}}">
+            @endforeach
+            <input type = "hidden" value="{{Auth::user()->id}}" name="customer_id">
+            <button type="submit">Submit</button>
+        </form>
     </div>
 @endsection
