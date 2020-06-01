@@ -59,7 +59,7 @@
 
                             <div class="form-group">
                                 <label for="name">Name</label>
-                                <input id="name" type="text" class="form-control" name="name" value="{{$detail->name}}" >
+                                <input id="name" type="text" class="form-control" name="name" value="{{$detail->name}}" required>
                             </div>
 
                             {{--                        price--}}
@@ -78,7 +78,7 @@
                             {{--                        description--}}
                             <div class="form-group">
                                 <label for="description">Description</label>
-                                <textarea id="description" class="form-control" name="description" placeholder="Description" rows="4" style="resize: none">{{$detail->description}}</textarea>
+                                <textarea id="description" class="form-control" name="description" placeholder="Description" rows="4" style="resize: none" required>{{$detail->description}}</textarea>
                             </div>
                             <div class="form-group ">
                                 <div class="">
@@ -117,21 +117,26 @@
                         {{--                                 date--}}
                         <div class="form-group">
                             <label for="date">Date</label>
-                            <input id="date" type="date" class="form-control" name="date" >
+                            <input id="date" type="date" class="form-control" name="date"  required>
+                            @error('date')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                         </div>
 
                         {{--                        from--}}
                         <div class="form-group">
                             <div class="row">
                                 <div class="col">
-                                    <label for="from">From</label>
-                                    <input id="from" type="time" class="form-control" name="from" required>
+                                    <label for="Start Time">Start</label>
+                                    <input id="Start_Time" type="time" class="form-control" name="Start_Time" required>
                                 </div>
 
                                 {{--                        to--}}
                                 <div class="col">
-                                    <label for="to">To</label>
-                                    <input id="to" type="time" class="form-control" name="to" required>
+                                    <label for="End time">End</label>
+                                    <input id="End_time" type="time" class="form-control" name="End_time" required>
                                 </div>
                             </div>
                         </div>
@@ -157,6 +162,68 @@
             </div>
         </div>
     </div>
+
+    {{--    edit time slot--}}
+    @foreach($timeSlots as $slots)
+        <div class="modal fade" id="editTime{{$slots->id}}" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="editTime" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content bg-light">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editTimeTitle">Add TimeSlot</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" >
+                        <form method="post" action="{{route('Timeslot.update',$slots->id)}}">
+                            @csrf
+                            @method('PUT')
+                            {{--                            futsal_id                            --}}
+                            <input type = "hidden" name="futsal_id" value="{{$detail->id}}">
+                            {{--                                 date--}}
+                            <div class="form-group">
+                                <label for="date">Date</label>
+                                <input id="date" type="date" class="form-control" name="date" value="{{$slots->date}}" required>
+                            </div>
+
+                            {{--                        from--}}
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="Start Time">Start</label>
+                                        <input id="Start_Time" type="time" class="form-control" name="Start_Time" required>
+                                    </div>
+
+                                    {{--                        to--}}
+                                    <div class="col">
+                                        <label for="End time">End</label>
+                                        <input id="End_time" type="time" class="form-control" name="End_time" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{--                        price--}}
+                            <div class="form-group">
+                                <label for="price">Price</label>
+                                <input id="price" type="text" class="form-control" name="price" value="{{$slots->price}}" required>
+                            </div>
+
+                            <div class="form-group ">
+                                <div class="">
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-dark pl-3 pr-3">
+                                            {{ __('Save') }}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
 
     {{--    end add time slot--}}
     {{--    breadcrumbs--}}
@@ -204,7 +271,17 @@
                 </div>
             </body>
             @endforeach
-
+            {{--            errors--}}
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            {{--end errors--}}
             <div class="card">
                 <div class="card-header d-inline-flex">
                     <h5>Booking Slots</h5>
@@ -226,9 +303,16 @@
                                 <td>{{$slots->date}}</td>
                                 <td>{{$slots->slots}}</td>
                                 <td>{{$slots->price}}</td>
-                                <td>
-                                    <button class="btn btn-dark"> Edit  </button >
-                                    <button class="btn btn-dark"> Delete </button >
+                                <td class="row">
+                                    <div class="col-2">
+                                        <button class="btn btn-dark" data-toggle="modal" data-target="#editTime{{$slots->id}}"> Edit</button >
+                                    </div>
+                                    <div class="col-2">
+                                        <form action = "{{route('Timeslot.delete',$slots->id)}}" method="post">
+                                            @csrf
+                                            <button class="btn btn-dark" type="submit"> Delete </button >
+                                        </form >
+                                    </div>
                                 </td>
                             </tr>
                             </tbody>

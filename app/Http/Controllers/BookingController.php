@@ -37,10 +37,14 @@ class BookingController extends Controller
      */
     public function store(Request $request)
     {
-        $booking = new BookingSlots();
-        $booking->time_slot_id = Input::get('time_slot_id');
-        $booking->customer_id = Input::get('customer_id');
-        return $request;
+        foreach ($request->timeslots as $index=>$timeslot) {
+            $booking = BookingSlots::create([
+                'time_slots_id'=>$timeslot,
+                'customer_id'=>$request->customer_id,
+                'payment'=>'remaining',
+            ]);
+        }
+        return redirect()->back();
     }
 
     /**

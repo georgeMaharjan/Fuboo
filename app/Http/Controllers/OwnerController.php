@@ -90,6 +90,11 @@ class OwnerController extends Controller
      */
     public function futsalupdate(Request $request, $id)
     {
+        request()->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'price'=>'required','min:3','numeric',
+            'image'=>'file|image',
+        ]);
 
         $user_id = Auth::user()->id;
 
@@ -147,15 +152,49 @@ class OwnerController extends Controller
 
     public function addTimeSlot(Request $request)
     {
+        request()->validate([
+            'date' => 'required|date|after:yesterday',
+            'price'=>'required','min:3','numeric',
+            'Start_time'=> 'required,before:End_time',
+            'End_time' => 'required'
+        ]);
+
         $timeSlot = new TimeSlots();
-        $from = Input::get('from');
-        $to = Input::get('to');
+        $from = Input::get('Start_Time');
+        $to = Input::get('End_Time');
         $slot = $from.'-'.$to;
         $timeSlot->futsal_id = Input::get('futsal_id');
         $timeSlot->date = Input::get('date');
         $timeSlot->slots = $slot;
         $timeSlot->price = Input::get('price');
         $timeSlot->save();
+        return back();
+    }
+
+    public function updateTimeslot($id)
+    {
+        $timeslot=TimeSlots::find($id);
+        request()->validate([
+            'date' => 'required|date|after:yesterday',
+            'price'=>'required','min:3','numeric',
+            'Start_time'=> 'required,before:End_time',
+            'End_time' => 'required'
+        ]);
+
+        $from = Input::get('Start_Time');
+        $to = Input::get('End_time');
+        $slot = $from.'-'.$to;
+        $timeslot->date = Input::get('date');
+        $timeslot->slots = $slot;
+        $timeslot->price = Input::get('price');
+        $timeslot->save();
+        return back();
+    }
+
+    public function deleteTimeslot($id)
+    {
+        $timeslot=TimeSlots::find($id);
+        $timeslot->delete();
         return back();
     }
 }

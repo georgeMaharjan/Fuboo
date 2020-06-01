@@ -10,6 +10,7 @@
         width: 100%;
         height: auto;
         margin: -150px 0 0 -10px;
+    }
 
 </style >
 @section('content')

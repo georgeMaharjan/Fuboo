@@ -64,6 +64,8 @@ Route::group(['middleware' => ['auth','owner']], function ()
     Route::view('/owner/profile/{id}', 'owner.oprofile')->name('owner.profile');
     Route::put('/owner/futsal/update/{id}','OwnerController@futsalupdate')->name('futsal.update');
     Route::post('/owner/addTimeSlot', 'OwnerController@addTimeSlot')->name('addTimeSlot');
+    Route::post('/owner/TimeSlot/delete/{id}', 'OwnerController@deleteTimeslot')->name('Timeslot.delete');
+    Route::put('/owner/TimeSlot/update/{id}', 'OwnerController@updateTimeslot')->name('Timeslot.update');
 });
 
 //player middleware
