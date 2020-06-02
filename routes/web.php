@@ -43,6 +43,7 @@ Route::get('/home', 'HomeController@home')->name('home');
 Route::group(['middleware' =>['auth','admin']],function ()
 {
     Route::get('/admin/','AdminController@index')->name('admin');
+    Route::put('/admin/update/{id}','AdminController@updateprofile')->name('admin.update');
 
     //admin user routes
     Route::get('/admin/users', 'UsersController@index')->name('admin.users');
@@ -61,8 +62,11 @@ Route::group(['middleware' => ['auth','owner']], function ()
     Route::get('/owner/{id}','OwnerController@show')->name('owner');
     Route::get('owner/booking/{id}', 'OwnerController@bookingPage')->name('bookings');
     Route::get('owner/stats/{id}', 'OwnerController@stats')->name('stats');
-    Route::view('/owner/profile/{id}', 'owner.oprofile')->name('owner.profile');
+    Route::get('/owner/profile/{id}', 'OwnerController@profile')->name('owner.profile');
+    Route::put('/owner/profile/update/{id}', 'OwnerController@updateProfile')->name('owner.update');
     Route::put('/owner/futsal/update/{id}','OwnerController@futsalupdate')->name('futsal.update');
+    Route::put('/owner/futsal/StatusClosed/{id}','OwnerController@statusClosed')->name('futsal.close');
+    Route::put('/owner/futsal/StatusOpen/{id}','OwnerController@statusOpen')->name('futsal.open');
     Route::post('/owner/addTimeSlot', 'OwnerController@addTimeSlot')->name('addTimeSlot');
     Route::post('/owner/TimeSlot/delete/{id}', 'OwnerController@deleteTimeslot')->name('Timeslot.delete');
     Route::put('/owner/TimeSlot/update/{id}', 'OwnerController@updateTimeslot')->name('Timeslot.update');

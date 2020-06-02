@@ -52,6 +52,7 @@ class UsersController extends Controller
 
         $futsal->name = Input::get('futsal' );
         $futsal->user_id = $owner->id;
+        $futsal->status = 'open';
 
         $futsal->save();
         return back();

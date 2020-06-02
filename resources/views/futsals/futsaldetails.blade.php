@@ -9,12 +9,12 @@
     .crop img {
         width: 100%;
         height: auto;
-        margin: -150px 0 0 -10px;
+        margin: -150px 0 0 0;
     }
 
 </style >
 @section('content')
-    <body class="mt-5">
+    <body class="container-md mt-5 p-0 mb-5">
     <div class="bd-example">
         <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
 
@@ -24,17 +24,13 @@
                 @endforeach
             </ol>
             <div class="carousel-inner">
-                @foreach( $images as $image )
-                    @if($image->image)
-                        <div class="carousel-item {{ $loop->first ? 'active' : '' }} crop">
-                            <img src="{{ asset($image->image) }}" class="d-block w-100" alt="..." height="auto" width="100%">
-                        </div>
-                    @else
-                        <div class="carousel-item {{ $loop->first ? 'active' : '' }} crop">
-                            <img src="{{asset('/images/ground.jpg')}}" class="d-block w-100">
-                        </div>
-                    @endif
-                @endforeach
+                @forelse( $images as $image )
+                    <div class="carousel-item {{ $loop->first ? 'active' : '' }} crop">
+                        <img src="{{ is_null($image->image) ? asset('images/ground.jpg') : asset($image->image) }}" class="d-block w-100" alt="..." height="auto" width="100%">
+                    </div>
+                @empty
+                    <img src="{{asset('images/ground.jpg')}}" class="d-block w-100" alt="..." height="auto" width="100%">
+                @endforelse
             </div>
             <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -48,47 +44,83 @@
     </div>
 
     @foreach( $futsal as $detail )
-        <div>
-            <h1>
-                {{$detail->name}}
-            </h1>
-            <h3>{{$detail->description}}</h3>
-            <h3>{{$detail->address}}</h3>
-            <h3>{{$detail->price}}</h3>
+        <div class="row mt-3">
+            <div class="col-md-4 ">
+                <h1>
+                    Futsal Name:
+                    {{$detail->name}}
+                </h1>
+
+                <h3>
+                    Address:
+                    {{$detail->address}}
+                </h3>
+
+                <h3>
+                    Price:
+                    {{$detail->price}}
+                </h3>
+                <h3>
+                    Description:
+                    {{$detail->description}}
+                </h3>
+                @if($detail->status=='open')
+                    <h2>
+                        Status:
+                        Open
+                    </h2>
+                @else
+                    <h2>Status:</h2>
+                    <button disabled class="btn btn-dark" >Futsal is closed</button >
+                @endif
+            </div>
+            @if($detail->latitude)
+                <h2>Find me here</h2>
+                <hr >
+                <iframe src="https://maps.google.com/maps?q={{$detail->latitude}}, {{$detail->longitude}}&z=17&output=embed" width="100%" height="300px" frameborder="10" style="border:0"></iframe>
+            @else
+                <h2>No map available</h2>
+            @endif
         </div>
         <hr>
+        <div>
+            {{--            booking slots--}}
+            <div class="container-md">
+                <h2>Booking Slots</h2>
+                <form action = "{{route('futsal.booking')}}" method="post">
 
-        {{--            booking slots--}}
-        <div class="container">
-            <h2>Booking Slots</h2>
-            <table class="table table-hover table-bordered table-responsive-lg">
-                <thead>
-                <tr>
-                    <th> Date </th>
-                    <th> Time Slot </th>
-                    <th> Price </th>
-                    <th> Book </th>
-                </tr>
-                @foreach($timeslots as $timeslot)
-                    <tr >
-                        <th > {{$timeslot -> date}}</th >
-                        <th > {{$timeslot -> slots}}</th >
-                        <th > {{$timeslot -> price}}</th >
-                        <th >
-                            <form action = "{{route('futsal.booking')}}" method="post">
-                                @csrf
-                                @auth()
-                                    <input type = "hidden" value="{{$timeslot->id}}" name="time_slot_id">
-                                    <input type = "hidden" value="{{Auth::user()->id}}" name="customer_id">
-                                @endauth
-                                <button type="submit" class="btn btn-black" >BOOK</button >
-                            </form >
-                        </th >
-                    </tr >
-                @endforeach
-                </thead>
-            </table>
-        </div>
-    </body>
+                    <table class="table table-hover table-bordered table-responsive-lg">
+                        <thead>
+                        <tr>
+                            <th> Date </th>
+                            <th> Time Slot </th>
+                            <th> Price </th>
+                            <th> Book </th>
+                        </tr>
+                        @csrf
+                        @auth()
+                            <input type = "hidden" value="{{Auth::user()->id}}" name="customer_id">
+                            <input type = "hidden" value="booked" name="status">
+                        @endauth
+                        @foreach($timeslots as $timeslot)
+                            <tr >
+                                <th > {{$timeslot -> date}}</th >
+                                <th > {{$timeslot -> slots}}</th >
+                                <th > {{$timeslot -> price}}</th >
+                                <th >
+                                    <input type = "checkbox" name = "timeslots[]" value="{{$timeslot->id}}">
+                                </th >
+                            </tr >
+                        @endforeach
+                        </thead>
+                    </table>
+                    @if($detail->status=='open')
+                        <button type="submit" class="btn btn-black" >BOOK</button >
+                    @else
+                        <button disabled class="btn btn-dark" >Futsal is closed</button >
+                    @endif
+                </form >
+            </div>
     @endforeach
+    </body>
 @endsection

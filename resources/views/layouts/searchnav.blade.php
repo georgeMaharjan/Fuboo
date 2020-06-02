@@ -66,6 +66,13 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{route('futsals')}}">Futsals</a>
                 </li>
+                @auth()
+                    @if(Auth::user()->type == 'owner')
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('owner',Auth::user()->id)}}">My Futsal</a>
+                        </li>
+                    @endif
+                @endauth
                 @guest
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
@@ -105,7 +112,7 @@
     </div>
 </nav>
 
-<main class="py-lg-5 mt-5">
+<main class="pt-5 mt-5">
     @yield('content')
 </main>
 

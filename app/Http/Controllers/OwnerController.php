@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Futsal;
 use App\Futsal_images;
 use App\TimeSlots;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
@@ -16,9 +17,30 @@ class OwnerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function profile($id)
     {
-        //
+        $owner=User::where('id',$id)
+            ->get();
+//        return $admin;
+        return view('owner.profile', compact('owner'));
+    }
+
+    public function updateProfile(Request $request, $id)
+    {
+        $admin=User::find($id);
+        $admin->name=Input::get('name');
+        $admin->number=Input::get('number');
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $ext = $image->getClientOriginalExtension();
+            $imageName = str_random(5) . '.' . $ext;
+            $uploadPath = public_path('images/users');
+            $image->move($uploadPath, $imageName);
+            $data['photo_path'] = "images/users/{$imageName}";
+            $admin->image = $data['photo_path'];
+        }
+        $admin->save();
+        return redirect()->back();
     }
 
     public function bookingPage($id)
@@ -26,6 +48,22 @@ class OwnerController extends Controller
         return view('owner.bookings');
     }
 
+    public function statusClosed($id)
+    {
+        $status=Futsal::find($id);
+        $status->status='closed';
+        $status->save();
+        return redirect()->back();
+
+    }
+    public function statusOpen($id)
+    {
+        $status=Futsal::find($id);
+        $status->status='open';
+        $status->save();
+        return redirect()->back();
+
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -125,17 +163,6 @@ class OwnerController extends Controller
             }
         }
 
-//        $futsal_images->save();
-//        if ($request->hasFile('images')) {
-//    foreach ($request->file('images') as $key => $images) {
-//        $ext = $images->getClientOriginalExtension();
-//        $imageName = str_random(5) . '.' . $ext;
-//        $uploadPath = public_path('images');
-//        $images->move($uploadPath, $imageName);
-//        $data['photo_path'] = "images/{$imageName}";
-//        $futsal_images->images = $data['photo_path'];
-//    }
-//}
         return redirect('owner/'.$user_id);
     }
 
@@ -161,7 +188,7 @@ class OwnerController extends Controller
 
         $timeSlot = new TimeSlots();
         $from = Input::get('Start_Time');
-        $to = Input::get('End_Time');
+        $to = Input::get('End_time');
         $slot = $from.'-'.$to;
         $timeSlot->futsal_id = Input::get('futsal_id');
         $timeSlot->date = Input::get('date');

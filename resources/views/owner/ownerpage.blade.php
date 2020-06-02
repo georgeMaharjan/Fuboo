@@ -25,9 +25,41 @@
     }
 </style>
 <link rel = "stylesheet" href = "{{asset('css/imagesupload.css')}}" >
-
+@foreach($futsal as $detail)
+    <title>{{$detail->name}}</title>
+@endforeach
 @section('content')
+    <div class="container pt-5">
+        @foreach($futsal as $detail)
+            <div class="row">
+                <div class="col-">
+                    <h2>Status: </h2>
+                </div>
+                <div class="col-4">
+                    @if($detail->status=='open')
+                        <form action = "{{route('futsal.close',$detail->id)}}" method="post">
+                            @method('put')
+                            @csrf
+                            <div class="row">
+                                <h3> Currently Opend </h3>
+                                <button type = "submit" class="btn btn-dark mx-2"><h3> Close Futsal </h3></button >
+                            </div>
+                        </form >
 
+                    @elseif($detail->status=='closed')
+                        <form action = "{{route('futsal.open',$detail->id)}}" method="post">
+                            @method('put')
+                            @csrf
+                            <div class="row">
+                                <button type = "submit" class="btn btn-success mx-2"><h3> Open Futsal </h3></button >
+                                <h3> Currently Closed </h3>
+                            </div>
+                        </form >
+                    @endif
+                </div>
+            </div>
+    </div>
+    @endforeach
     <!-- end Modal edit Futsal -->
     <div class="modal fade" id="editFutsal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="editFutsalTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable" role="document">
@@ -169,7 +201,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content bg-light">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="editTimeTitle">Add TimeSlot</h5>
+                        <h5 class="modal-title" id="editTimeTitle">Edit TimeSlot</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -240,11 +272,13 @@
                         @endforeach
                     </ol>
                     <div class="carousel-inner">
-                        @foreach( $images as $image )
+                        @forelse( $images as $image )
                             <div class="carousel-item {{ $loop->first ? 'active' : '' }} crop">
                                 <img src="{{ is_null($image->image) ? asset('images/ground.jpg') : asset($image->image) }}" class="d-block w-100" alt="..." height="auto" width="100%">
                             </div>
-                        @endforeach
+                        @empty
+                            <img src="{{asset('images/ground.jpg')}}" class="d-block w-100" alt="..." height="auto" width="100%">
+                        @endforelse
                     </div>
                     <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -258,16 +292,44 @@
             </div>
             <!--Carousel-->
             @foreach( $futsal as $detail )
-                <div  class="container">
-                    <button type="button" class="btn btn-dark mt-3" data-toggle="modal" data-target="#editFutsal">
-                        Edit Futsal
-                    </button>
-                    <h1>
-                        {{$detail->name}}
-                    </h1>
-                    <h3>{{$detail->description}}</h3>
-                    <h3>{{$detail->address}}</h3>
-                    <h3>{{$detail->price}}</h3>
+                <div  class="container row">
+                    <div class="col-4">
+                        <button type="button" class="btn btn-dark mt-3" data-toggle="modal" data-target="#editFutsal">
+                            Edit Futsal
+                        </button>
+                        <h1>
+                            Futsal Name:
+                            {{$detail->name}}
+                        </h1>
+
+                        <h3>
+                            Address:
+                            {{$detail->address}}
+                        </h3>
+
+                        <h3>
+                            Price:
+                            {{$detail->price}}
+                        </h3>
+
+                        <h3>
+                            Contact:
+                            {{Auth::user()->number}}
+                        </h3>
+                        <h3>
+                            Description:
+                            {{$detail->description}}
+                        </h3>
+                    </div>
+                    <div class="col-8">
+                        @if($detail->latitude)
+                            <h2>Find me here</h2>
+                            <hr >
+                            <iframe src="https://maps.google.com/maps?q={{$detail->latitude}}, {{$detail->longitude}}&z=17&output=embed" width="100%" height="300px" frameborder="10" style="border:0"></iframe>
+                        @else
+                            <h2>No map available</h2>
+                        @endif
+                    </div>
                 </div>
             </body>
             @endforeach
@@ -349,105 +411,105 @@
     </script>
 
     {{-- maps--}}
-    {{--        <script>--}}
-    {{--            // donot submit--}}
-    {{--            $(document).ready(function() {--}}
-    {{--                $(window).keydown(function(event){--}}
-    {{--                    if(event.keyCode == 13) {--}}
-    {{--                        event.preventDefault();--}}
-    {{--                        return false;--}}
-    {{--                    }--}}
-    {{--                });--}}
-    {{--            });--}}
-    {{--            // end dont submit--}}
+    <script>
+        // donot submit
+        $(document).ready(function() {
+            $(window).keydown(function(event){
+                if(event.keyCode == 13) {
+                    event.preventDefault();
+                    return false;
+                }
+            });
+        });
+        // end dont submit
 
-    {{--            // maps--}}
-    {{--            $('#editFutsal').on('show.bs.modal', function(e){--}}
-    {{--                var modal = $(this);--}}
-    {{--                initMap('map', modal, 27.7059, 85.3340);--}}
-    {{--            });--}}
-    {{--            var infoWindow,map;--}}
-    {{--            function initMap(mapElementId, card, a = 27.7059, b = 85.3340) {--}}
-    {{--                var diff = 0.1000;--}}
-    {{--                //map options--}}
-    {{--                var options = {--}}
-    {{--                    zoom:17,--}}
-    {{--                    center:{lat:a, lng:b},--}}
-    {{--                };--}}
-    {{--                var restriction = {--}}
-    {{--                    componentRestrictions: {country: 'np'}--}}
-    {{--                };--}}
-    {{--                var infowindow = new google.maps.InfoWindow();--}}
-    {{--                var infowindowContent = document.getElementById('infowindow-content');--}}
-    {{--                infowindow.setContent(infowindowContent);--}}
-    {{--                var markerCoordinates= {lat:a, lng:b};--}}
-    {{--                //new map--}}
-    {{--                map = new google.maps.Map(document.getElementById(mapElementId), options);--}}
-    {{--                var input = document.getElementById('search');--}}
-    {{--                var searchBox = new google.maps.places.Autocomplete(input, restriction);--}}
-    {{--                var marker = new google.maps.Marker({--}}
-    {{--                    map:map,--}}
-    {{--                    position: markerCoordinates,--}}
-    {{--                    draggable: true,--}}
-    {{--                });--}}
-    {{--                var geocoder = new google.maps.Geocoder();--}}
-    {{--                geocoder.geocode({latLng:marker.getPosition()},function (result ,status){--}}
-    {{--                    if('OK'===status){--}}
-    {{--                        address = result[0].formatted_address;--}}
-    {{--                        card.find('input[name=address_line_1]').val(address);--}}
-    {{--                        card.find('input[name=display_address]').val(address);--}}
-    {{--                    }--}}
-    {{--                });--}}
-    {{--                map.addListener('bounds_changed',function(){--}}
-    {{--                    searchBox.setBounds(map.getBounds());--}}
-    {{--                });--}}
-    {{--                searchBox.addListener('place_changed', function() {--}}
-    {{--                    infowindow.close();--}}
-    {{--                    marker.setVisible(false);--}}
-    {{--                    var place = searchBox.getPlace();--}}
-    {{--                    if (!place.geometry) {--}}
-    {{--                        window.alert("No details available for input: '" + place.name + "'");--}}
-    {{--                        return;--}}
-    {{--                    }--}}
-    {{--                    // If the place has a geometry, then present it on a map.--}}
-    {{--                    if (place.geometry.viewport) {--}}
-    {{--                        map.fitBounds(place.geometry.viewport);--}}
-    {{--                    } else {--}}
-    {{--                        map.setCenter(place.geometry.location);--}}
-    {{--                        map.setZoom(17);--}}
-    {{--                    }--}}
-    {{--                    marker.setPosition(place.geometry.location);--}}
-    {{--                    marker.setVisible(true);--}}
-    {{--                    var address = '';--}}
-    {{--                    if (place.address_components) {--}}
-    {{--                        address = [--}}
-    {{--                            (place.address_components[0] && place.address_components[0].short_name || ''),--}}
-    {{--                            (place.address_components[1] && place.address_components[1].short_name || ''),--}}
-    {{--                            (place.address_components[2] && place.address_components[2].short_name || '')--}}
-    {{--                        ].join(' ');--}}
-    {{--                    }--}}
-    {{--                    card.find('input[name=address_line_1]').val(address);--}}
-    {{--                    card.find('input[name=display_address]').val(address);--}}
-    {{--                    card.find('input[name=latitude]').val(place.geometry.location.lat());--}}
-    {{--                    card.find('input[name=longitude]').val(place.geometry.location.lng());--}}
-    {{--                });--}}
-    {{--                google.maps.event.addListener(marker, 'dragend', function(e) {--}}
-    {{--                    displayPosition(this.getPosition());--}}
-    {{--                    geocoder.geocode({latLng:marker.getPosition()},function (result ,status){--}}
-    {{--                        if('OK'===status){--}}
-    {{--                            address = result[0].formatted_address;--}}
-    {{--                            card.find('input[name=address_line_1]').val(address);--}}
-    {{--                            card.find('input[name=display_address]').val(address);--}}
-    {{--                        }--}}
-    {{--                        console.log(address);--}}
-    {{--                    })--}}
-    {{--                });--}}
-    {{--                function displayPosition(pos) {--}}
-    {{--                    card.find('input[name=latitude]').val(pos.lat());--}}
-    {{--                    card.find('input[name=longitude]').val(pos.lng());--}}
-    {{--                }--}}
-    {{--            }--}}
-    {{--        </script>--}}
-    {{--        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9_-5XwAG2EqiuzpFLEUK0ZX-P5Bgm9Yk&libraries=places" async defer></script>--}}
+        // maps
+        $('#editFutsal').on('show.bs.modal', function(e){
+            var modal = $(this);
+            initMap('map', modal, 27.673321, 85.325116);
+        });
+        var infoWindow,map;
+        function initMap(mapElementId, card, a = 27.673321, b = 85.325116) {
+            var diff = 0.1000;
+            //map options
+            var options = {
+                zoom:17,
+                center:{lat:a, lng:b},
+            };
+            var restriction = {
+                componentRestrictions: {country: 'np'}
+            };
+            var infowindow = new google.maps.InfoWindow();
+            var infowindowContent = document.getElementById('infowindow-content');
+            infowindow.setContent(infowindowContent);
+            var markerCoordinates= {lat:a, lng:b};
+            //new map
+            map = new google.maps.Map(document.getElementById(mapElementId), options);
+            var input = document.getElementById('search');
+            var searchBox = new google.maps.places.Autocomplete(input, restriction);
+            var marker = new google.maps.Marker({
+                map:map,
+                position: markerCoordinates,
+                draggable: true,
+            });
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode({latLng:marker.getPosition()},function (result ,status){
+                if('OK'===status){
+                    address = result[0].formatted_address;
+                    card.find('input[name=address_line_1]').val(address);
+                    card.find('input[name=display_address]').val(address);
+                }
+            });
+            map.addListener('bounds_changed',function(){
+                searchBox.setBounds(map.getBounds());
+            });
+            searchBox.addListener('place_changed', function() {
+                infowindow.close();
+                marker.setVisible(false);
+                var place = searchBox.getPlace();
+                if (!place.geometry) {
+                    window.alert("No details available for input: '" + place.name + "'");
+                    return;
+                }
+                // If the place has a geometry, then present it on a map.
+                if (place.geometry.viewport) {
+                    map.fitBounds(place.geometry.viewport);
+                } else {
+                    map.setCenter(place.geometry.location);
+                    map.setZoom(17);
+                }
+                marker.setPosition(place.geometry.location);
+                marker.setVisible(true);
+                var address = '';
+                if (place.address_components) {
+                    address = [
+                        (place.address_components[0] && place.address_components[0].short_name || ''),
+                        (place.address_components[1] && place.address_components[1].short_name || ''),
+                        (place.address_components[2] && place.address_components[2].short_name || '')
+                    ].join(' ');
+                }
+                card.find('input[name=address_line_1]').val(address);
+                card.find('input[name=display_address]').val(address);
+                card.find('input[name=latitude]').val(place.geometry.location.lat());
+                card.find('input[name=longitude]').val(place.geometry.location.lng());
+            });
+            google.maps.event.addListener(marker, 'dragend', function(e) {
+                displayPosition(this.getPosition());
+                geocoder.geocode({latLng:marker.getPosition()},function (result ,status){
+                    if('OK'===status){
+                        address = result[0].formatted_address;
+                        card.find('input[name=address_line_1]').val(address);
+                        card.find('input[name=display_address]').val(address);
+                    }
+                    console.log(address);
+                })
+            });
+            function displayPosition(pos) {
+                card.find('input[name=latitude]').val(pos.lat());
+                card.find('input[name=longitude]').val(pos.lng());
+            }
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9_-5XwAG2EqiuzpFLEUK0ZX-P5Bgm9Yk&libraries=places" async defer></script>
 
 @endsection

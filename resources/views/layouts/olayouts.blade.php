@@ -18,8 +18,11 @@
     <link rel="stylesheet" href="{{asset('plugins/jqvmap/jqvmap.min.css')}}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{asset('dist/css/adminlte.min.css')}}">
+
     <!-- overlayScrollbars -->
     <link rel="stylesheet" href="{{asset('plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}">
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="{{asset('plugins/daterangepicker/daterangepicker.css')}}">
     <!-- summernote -->
     <link rel="stylesheet" href="{{asset('plugins/summernote/summernote-bs4.css')}}">
 
@@ -59,7 +62,7 @@
                     <img src="{{asset('images/default.png')}}" class="img-circle elevation-2" alt="">
                 </div>
                 <div class="info">
-                    <a href="{{ route('owner',Auth::user()->id)  }}" class="d-block">{{ Auth::user()->name }}</a>
+                    <a href="{{ route('owner.profile',Auth::user()->id)  }} class="d-block">{{ Auth::user()->name }}</a>
                 </div>
             </div>
             <!-- Sidebar Menu -->
@@ -68,6 +71,14 @@
                     <!-- Add icons to the links using the .nav-icon class
                          with font-awesome or any other icon font library -->
 
+                    <li class="nav-item">
+                        <a href="{{ route('owner.profile',Auth::user()->id)  }}" class="nav-link ">
+                            <i class="nav-icon fas fa-user"></i>
+                            <p>
+                                Profile
+                            </p>
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <a href="{{ route('owner',Auth::user()->id)  }}" class="nav-link ">
                             <i class="nav-icon fas fa-user-cog"></i>

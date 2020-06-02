@@ -14,7 +14,7 @@ class CreateBookingSlotsTable extends Migration
     public function up()
     {
         Schema::create('booking_slots', function (Blueprint $table) {
-            $table->bigInteger('id');
+            $table->bigIncrements('id');
             $table->unsignedBigInteger('time_slots_id');
             $table->unsignedBigInteger('customer_id');
             $table->foreign('customer_id')

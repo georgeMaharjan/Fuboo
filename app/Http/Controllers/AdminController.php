@@ -89,9 +89,22 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function updateprofile(Request $request, $id)
     {
-        //
+        $admin=User::find($id);
+        $admin->name=Input::get('name');
+        $admin->number=Input::get('number');
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $ext = $image->getClientOriginalExtension();
+            $imageName = str_random(5) . '.' . $ext;
+            $uploadPath = public_path('images/users');
+            $image->move($uploadPath, $imageName);
+            $data['photo_path'] = "images/users/{$imageName}";
+            $admin->image = $data['photo_path'];
+        }
+        $admin->save();
+        return redirect()->back();
     }
 
     /**

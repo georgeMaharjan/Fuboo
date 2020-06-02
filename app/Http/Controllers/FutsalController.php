@@ -34,7 +34,11 @@ class FutsalController extends Controller
         $results = Futsal::where('address', 'LIKE', "%{$search}%")
             ->orwhere('name', 'like', "%{$search}%")
             ->get();
-        return view('results',compact('results'));
+        foreach ($results as $result)
+        {
+            $timeslots=TimeSlots::where('futsal_id',$result->id)->get();
+        }
+        return view('results',compact('results','timeslots'));
     }
 
     public function create()
